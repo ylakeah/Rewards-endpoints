@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const rewardService = require("./rewardService");
-const userService = require("./userService");
+const rewardService = require("../services/rewardService");
+const userService = require("../services/userService");
 
 const app = express();
 app.use(bodyParser.json());

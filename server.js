@@ -1,4 +1,4 @@
-const app = require("./controller");
+const app = require("./controllers/userController");
 
 const PORT = process.env.PORT || 3000;
 
