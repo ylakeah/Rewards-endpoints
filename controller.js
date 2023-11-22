@@ -1,25 +1,30 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const rewardService = require("./rewardService");
+const userService = require("./userService");
 
 const app = express();
 app.use(bodyParser.json());
 
-// In-memory data
-let users = {};
 
 // Route to get rewards for a user at a specific date
-app.get("/users/:userId/rewards", (req, res) => {
+app.get("/users/:userId/rewards", async (req, res) => {
   const userId = req.params.userId;
   const date = req.query.at;
 
+  // Load users from the JSON file
+  await userService.loadUsers();
+
   // Check if the user exists, if not, create a new user
-  if (!users[userId]) {
-    users[userId] = { id: userId };
+  if (!userService.getUsers()[userId]) {
+    userService.getUsers()[userId] = { id: userId };
+
+    // Save users after creating a new user
+    await userService.saveUsers();
   }
 
   // Load rewards from the JSON file
-  rewardService.loadRewardsPromise();
+  rewardService.loadRewards();
 
   // Check if rewards for the specified date and user already exist
   if (!rewardService.getRewards()[`${userId}-${date}`]) {
@@ -37,8 +42,11 @@ app.patch("/users/:userId/rewards/:availableAt/redeem", async (req, res) => {
   const userId = req.params.userId;
   const availableAt = req.params.availableAt;
 
-  // Wait for the promise to load rewards
-  await rewardService.loadRewardsPromise();
+  // Load users from the JSON file
+  await userService.loadUsers();
+
+  // Load rewards
+  await rewardService.loadRewards();
 
   // Find the reward based on userId and availableAt
   const reward = rewardService.getRewards()[`${userId}-${availableAt}`];

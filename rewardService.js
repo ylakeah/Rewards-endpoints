@@ -59,17 +59,11 @@ function generateRewards(userId, startDate) {
   return generatedRewards;
 }
 
-// Adding a function to get a promise for loading rewards
-function loadRewardsPromise() {
-  return loadRewards().then(() => rewards);
-}
-
 const rewardService = {
   getRewards: () => rewards,
   loadRewards,
   saveRewards,
   generateRewards,
-  loadRewardsPromise,
 };
 
 module.exports = rewardService;
