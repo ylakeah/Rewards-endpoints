@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./index.js'); // assuming your app file is named app.js
+const app = require('./controller.js'); // assuming your app file is named app.js
 
 describe('Reward API Tests', () => {
   it('should generate rewards for a user on a specific date', async () => {
